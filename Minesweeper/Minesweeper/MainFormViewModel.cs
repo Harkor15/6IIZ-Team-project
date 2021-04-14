@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Minesweeper
 {
@@ -13,6 +12,7 @@ namespace Minesweeper
         int cellSize = 25;
         public Observable<String> message = new Observable<string>();
         public Observable<List<List<MinesweeperField>>> minefield= new Observable<List<List<MinesweeperField>>>();
+        private List<List<MinesweeperField>> minefieldLocal= new List<List<MinesweeperField>>();
         public Observable<Size> minefieldSize = new Observable<Size>();
 
         public void CreateNewGame(int width, int height, int bombs)
@@ -21,22 +21,48 @@ namespace Minesweeper
             if (Validator.isCreateNewGamaInitialSettingsValid(width, height, bombs))
             {
                 minefieldSize.Event(new Size(cellSize * width, cellSize * height));
-                minefield.Event(MinefieldGenerator.GenerateMinefield(width, height, bombs));
-
-                /*for(int x = 0; x < minefield.Count; x++)
-                {
-                    
-                    for(int y = 0; y < minefield[0].Count; y++)
-                    {
-                        if (minefield[x][y].isBomb) Console.Write(" B ");
-                        else Console.Write(" " + minefield[x][y].number + " ");
-                    }
-                }*/
+                minefieldLocal = MinefieldGenerator.GenerateMinefield(width, height, bombs);
+                minefield.Event(minefieldLocal);
             }
             else
             {
                 message.Event("Initial values incorrect!");
             }
+        }
+        public void MinefieldClicked(int pxX, int pxY, bool left )
+        {
+            int x = Calculator.CalculateFieldNumber(cellSize, pxX);
+            int y = Calculator.CalculateFieldNumber(cellSize, pxY);
+            FieldClicked(x, y,left);
+        }
+
+
+        private void FieldClicked(int x, int y, bool left)
+        {
+            if (!minefieldLocal[x][y].unlocked)
+            {
+                if (left)
+                {
+                    if (!minefieldLocal[x][y].checkedAsBomb)
+                    {
+                        if (minefieldLocal[x][y].isBomb)
+                        {
+                            GameOver();
+                        }
+                        minefieldLocal[x][y].unlocked = true;
+                    }
+                }
+                else
+                {
+                    minefieldLocal[x][y].checkedAsBomb = !minefieldLocal[x][y].checkedAsBomb;
+                }
+                minefield.Event(minefieldLocal);
+            }
+        }
+
+        private void GameOver()
+        {
+            message.Event("Game Over!");
         }
     }
 }

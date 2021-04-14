@@ -20,17 +20,24 @@ namespace Minesweeper.Utils
                     int actualY = 0;
                     for (int y = 0; y<minefield[0].Count; y++)
                     {
-                        if (minefield[x][y].isBomb) g.DrawImage(Properties.Resources.bomb, actualX, actualY);
-                        else if (minefield[x][y].number == 0) g.DrawImage(Properties.Resources.blank, actualX, actualY);
-                        else if (minefield[x][y].number==1) g.DrawImage(Properties.Resources._1, actualX, actualY);
-                        else if(minefield[x][y].number==2) g.DrawImage(Properties.Resources._2, actualX, actualY);
-                        else if(minefield[x][y].number==3) g.DrawImage(Properties.Resources._3, actualX, actualY);
-                        else if(minefield[x][y].number==4) g.DrawImage(Properties.Resources._4, actualX, actualY);
-                        else if(minefield[x][y].number==5) g.DrawImage(Properties.Resources._5, actualX, actualY);
-                        else if(minefield[x][y].number==6) g.DrawImage(Properties.Resources._6, actualX, actualY);
-                        else if(minefield[x][y].number==7) g.DrawImage(Properties.Resources._7, actualX, actualY);
-                        else if(minefield[x][y].number==8) g.DrawImage(Properties.Resources._8, actualX, actualY);
-                        else if(minefield[x][y].number==9) g.DrawImage(Properties.Resources._9, actualX, actualY);
+                        if (minefield[x][y].unlocked) {
+                            if (minefield[x][y].isBomb) g.DrawImage(Properties.Resources.bomb, actualX, actualY);
+                            else if (minefield[x][y].number == 0) g.DrawImage(Properties.Resources.blank, actualX, actualY);
+                            else if (minefield[x][y].number == 1) g.DrawImage(Properties.Resources._1, actualX, actualY);
+                            else if (minefield[x][y].number == 2) g.DrawImage(Properties.Resources._2, actualX, actualY);
+                            else if (minefield[x][y].number == 3) g.DrawImage(Properties.Resources._3, actualX, actualY);
+                            else if (minefield[x][y].number == 4) g.DrawImage(Properties.Resources._4, actualX, actualY);
+                            else if (minefield[x][y].number == 5) g.DrawImage(Properties.Resources._5, actualX, actualY);
+                            else if (minefield[x][y].number == 6) g.DrawImage(Properties.Resources._6, actualX, actualY);
+                            else if (minefield[x][y].number == 7) g.DrawImage(Properties.Resources._7, actualX, actualY);
+                            else if (minefield[x][y].number == 8) g.DrawImage(Properties.Resources._8, actualX, actualY);
+                            else if (minefield[x][y].number == 9) g.DrawImage(Properties.Resources._9, actualX, actualY);
+                        }
+                        else
+                        {
+                            if (minefield[x][y].checkedAsBomb) g.DrawImage(Properties.Resources.flag, actualX, actualY);
+                            else g.DrawImage(Properties.Resources.hiden, actualX, actualY);
+                        }
                         actualY += cellSize;
                     }
                     actualX += cellSize;

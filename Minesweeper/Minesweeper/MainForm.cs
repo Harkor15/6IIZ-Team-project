@@ -55,5 +55,10 @@ namespace Minesweeper
             int bombs = (int)numericUpDownNewGameBombs.Value;
             viewModel.CreateNewGame(width, height, bombs);
         }
+
+        private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
+        {
+            viewModel.MinefieldClicked(e.X, e.Y,e.Button==MouseButtons.Left);
+        }
     }
 }

@@ -155,6 +155,7 @@
             this.pictureBox1.Size = new System.Drawing.Size(25, 25);
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseClick);
             // 
             // MainForm
             // 
@@ -181,10 +182,10 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.NumericUpDown numericUpDownNewGameWidth;
         private System.Windows.Forms.NumericUpDown numericUpDownNewGameBombs;
         private System.Windows.Forms.NumericUpDown numericUpDownNewGameHeight;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 
