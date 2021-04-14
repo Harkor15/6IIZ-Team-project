@@ -49,7 +49,9 @@ namespace Minesweeper
                         {
                             GameOver();
                         }
-                        minefieldLocal[x][y].unlocked = true;
+                        MinefieldEditor minefieldEditor = new MinefieldEditor();
+                        minefieldLocal=minefieldEditor.ShowNeighboursFields(minefieldLocal,x,y);
+                        //minefieldLocal[x][y].unlocked = true;
                     }
                 }
                 else
