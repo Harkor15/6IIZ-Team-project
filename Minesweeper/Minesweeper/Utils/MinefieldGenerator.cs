@@ -11,17 +11,43 @@ namespace Minesweeper.Utils
         public static List<List<MinesweeperField>> GenerateMinefield(int width, int height, int bombs)
         {
             var minefield = GenerateEmptyMinefield(width, height);
-            Console.WriteLine("Empty generated");
             minefield = SetBombs(minefield, bombs);
-            Console.WriteLine("Bombs set");
             minefield = SetIcons(minefield);
-            Console.WriteLine("Icons set");
 
 
             return minefield;
         }
 
-        private static List<List<MinesweeperField>> SetIcons(List<List<MinesweeperField>> minefield)
+        public static List<List<MinesweeperField>> GenerateBlankMinefield(int width, int height)
+        {
+            List<List<MinesweeperField>> minefield = new List<List<MinesweeperField>>();
+
+            for (int i = 0; i < width; i++)
+            {
+                minefield.Add(new List<MinesweeperField>());
+                for (int j = 0; j < height; j++)
+                {
+                    var field = new MinesweeperField();
+                    field.unlocked = true;
+                    minefield[i].Add(field);
+                }
+            }
+            return minefield;
+        }
+
+        public static List<List<MinesweeperField>> ConvertDesignerToGamefield(List<List<MinesweeperField>> minefield)
+        {
+            for (int x = 0; x < minefield.Count; x++)
+            {
+                for (int y = 0; y < minefield[0].Count; y++)
+                {
+                    minefield[x][y].unlocked = false;
+                }
+            }
+            return SetIcons(minefield);
+        }
+
+        public static List<List<MinesweeperField>> SetIcons(List<List<MinesweeperField>> minefield)
         {
             for(int x = 0; x < minefield.Count; x++)
             {
@@ -67,7 +93,6 @@ namespace Minesweeper.Utils
                 {
                     if (minefield[x][y].isBomb)
                     {
-                        Console.WriteLine("this is bomb: " + x + "x" + y);
                         x++;
                         if (x >= minefield[0].Count)
                         {
@@ -83,8 +108,6 @@ namespace Minesweeper.Utils
                     {
                         minefield[x][y].isBomb = true;
                         isBombSet = true;
-                        Console.WriteLine("bomb set on: " + x + "x" + y);
-
                     }
                 } while (!isBombSet);
             }

@@ -43,7 +43,9 @@ namespace Minesweeper
         private void Minefield_Handler(object sender, List<List<MinesweeperField>> e)
         {
             if (minefieldBitmap != null) minefieldBitmap.Dispose();
+
             minefieldBitmap = BitmapGenerator.GenerateBitmap(e);
+            pictureBox1.Size = minefieldBitmap.Size;
             pictureBox1.Image = minefieldBitmap;
             
         }
@@ -59,6 +61,18 @@ namespace Minesweeper
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
             viewModel.MinefieldClicked(e.X, e.Y,e.Button==MouseButtons.Left);
+        }
+
+        private void buttonCreateBlank_Click(object sender, EventArgs e)
+        {
+            int width = (int)numericUpDownDesignerWIdth.Value;
+            int height = (int)numericUpDownDesignerHeight.Value;
+            viewModel.StartDesinger(width, height);
+        }
+
+        private void buttonPlay_Click(object sender, EventArgs e)
+        {
+            viewModel.DesignerPlay();
         }
     }
 }

@@ -12,5 +12,31 @@ namespace Minesweeper.Utils
         {
             return pixel / cellSize;
         }
+
+        public static int CountUncheckedfields(List<List<MinesweeperField>> minefield)
+        {
+            int count = 0;
+            for(int x=0; x < minefield.Count; x++)
+            {
+                for(int y=0; y < minefield[x].Count; y++)
+                {
+                    if (!minefield[x][y].unlocked) count++;
+                }
+            }
+            return count;
+        }
+
+        public static int CalculateBombs(List<List<MinesweeperField>> minefield)
+        {
+            int count = 0;
+            for (int x = 0; x < minefield.Count; x++)
+            {
+                for (int y = 0; y < minefield[x].Count; y++)
+                {
+                    if (minefield[x][y].isBomb) count++;
+                }
+            }
+            return count;
+        }
     }
 }

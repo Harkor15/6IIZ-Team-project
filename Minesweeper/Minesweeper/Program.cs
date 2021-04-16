@@ -14,8 +14,6 @@ namespace Minesweeper
         [STAThread]
         static void Main()
         {
-            System.Diagnostics.Debug.WriteLine("wut");
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());

@@ -14,15 +14,20 @@ namespace Minesweeper
         public Observable<List<List<MinesweeperField>>> minefield= new Observable<List<List<MinesweeperField>>>();
         private List<List<MinesweeperField>> minefieldLocal= new List<List<MinesweeperField>>();
         public Observable<Size> minefieldSize = new Observable<Size>();
+        bool lockGame = true;
+        int bombs = 0;
+        Mode mode = Mode.PLAY;
 
         public void CreateNewGame(int width, int height, int bombs)
         {
-            Console.WriteLine("Go game");
             if (Validator.isCreateNewGamaInitialSettingsValid(width, height, bombs))
             {
                 minefieldSize.Event(new Size(cellSize * width, cellSize * height));
                 minefieldLocal = MinefieldGenerator.GenerateMinefield(width, height, bombs);
                 minefield.Event(minefieldLocal);
+                lockGame = false;
+                this.bombs = bombs;
+                mode = Mode.PLAY;
             }
             else
             {
@@ -33,13 +38,19 @@ namespace Minesweeper
         {
             int x = Calculator.CalculateFieldNumber(cellSize, pxX);
             int y = Calculator.CalculateFieldNumber(cellSize, pxY);
-            FieldClicked(x, y,left);
+
+            if (mode == Mode.PLAY) FieldClicked(x, y, left);
+            else FieldClickedInDesigner(x, y);
         }
 
-
+        private void FieldClickedInDesigner(int x, int y)
+        {
+            minefieldLocal[x][y].isBomb = !minefieldLocal[x][y].isBomb;
+            minefield.Event(minefieldLocal);
+        }
         private void FieldClicked(int x, int y, bool left)
         {
-            if (!minefieldLocal[x][y].unlocked)
+            if (!minefieldLocal[x][y].unlocked&&!lockGame)
             {
                 if (left)
                 {
@@ -52,6 +63,13 @@ namespace Minesweeper
                         MinefieldEditor minefieldEditor = new MinefieldEditor();
                         minefieldLocal=minefieldEditor.ShowNeighboursFields(minefieldLocal,x,y);
                         //minefieldLocal[x][y].unlocked = true;
+                        int unlockedFields=Calculator.CountUncheckedfields(minefieldLocal);
+                        if (unlockedFields == bombs)
+                        {
+                            lockGame = true;
+                            message.Event("You win!");
+                        }
+                        
                     }
                 }
                 else
@@ -65,6 +83,25 @@ namespace Minesweeper
         private void GameOver()
         {
             message.Event("Game Over!");
+        }
+
+        public void StartDesinger(int width, int height)
+        {
+            mode = Mode.DESIGNER;
+            minefieldLocal=MinefieldGenerator.GenerateBlankMinefield(width, height);
+            minefield.Event(minefieldLocal);
+            lockGame = false;
+        }
+
+        public void DesignerPlay()
+        {
+            if (minefieldLocal.Count > 0)
+            {
+                minefieldLocal = MinefieldGenerator.ConvertDesignerToGamefield(minefieldLocal);
+                bombs = Calculator.CalculateBombs(minefieldLocal);
+                minefield.Event(minefieldLocal);
+                mode = Mode.PLAY;
+            }
         }
     }
 }
